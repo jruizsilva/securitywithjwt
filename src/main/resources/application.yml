@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: dev
+  main:
+    banner-mode: 'off'
+  output:
+    ansi:
+      enabled: always
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    password: admin
+    url: jdbc:postgresql://localhost:5432/securitywithjwt
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    password: admin
+    url: jdbc:postgresql://localhost:5432/securitywithjwt
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
