@@ -10,4 +10,5 @@ public interface JwtService {
     String generateToken(UserEntity userEntity,
                          Map<String, Object> claims);
 
+    String extractUsername(String token);
 }

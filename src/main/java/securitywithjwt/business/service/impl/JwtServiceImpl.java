@@ -1,5 +1,6 @@
 package securitywithjwt.business.service.impl;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import securitywithjwt.business.service.JwtService;
 import securitywithjwt.domain.entity.UserEntity;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 
@@ -39,7 +40,21 @@ public class JwtServiceImpl implements JwtService {
                    .compact();
     }
 
-    private Key generateKey() {
+    @Override
+    public String extractUsername(String token) {
+        return extractAllClaims(token)
+                .getSubject();
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                   .verifyWith(generateKey())
+                   .build()
+                   .parseSignedClaims(token)
+                   .getPayload();
+    }
+
+    private SecretKey generateKey() {
         byte[] secretAsBytes = Decoders.BASE64.decode(SECRET_KEY);
         System.out.println("mi clave es: " + new String(secretAsBytes));
         return Keys.hmacShaKeyFor(secretAsBytes);
